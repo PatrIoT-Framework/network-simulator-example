@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2018 Patriot project
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <groupId>com.redhat.patriot</groupId>
+   <artifactId>network-simulator-example</artifactId>
+   <version>1.0-SNAPSHOT</version>
+
+   <name>Network-simulator-example</name>
+   <description>This project is example of working network simulation with java-docker API
+   </description>
+   <licenses>
+      <license>
+         <name>Apache License, Version 2.0</name>
+         <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+         <distribution>repo</distribution>
+         <comments>A business-friendly OSS license</comments>
+      </license>
+   </licenses>
+
+   <developers>
+      <developer>
+         <id>obabec</id>
+         <email>benessi1@fit.c</email>
+         <organization>Red Hat</organization>
+         <name>Ondřej Babec</name>
+         <roles>
+            <role>developer</role>
+         </roles>
+         <timezone>Europe/Prague</timezone>
+      </developer>
+      <developer>
+         <id>sbunciak</id>
+         <email>sbunciak@redhat.com</email>
+         <organization>Red Hat</organization>
+         <name>Štefan Bunčiak</name>
+         <roles>
+            <role>Project manager</role>
+         </roles>
+         <timezone>Europe/Prague</timezone>
+      </developer>
+      <developer>
+         <id>mbures</id>
+         <email>miroslav.bures@fel.cvut.cz</email>
+         <organization>FEL CVUT</organization>
+         <name>Miroslav Bureš</name>
+         <roles>
+            <role>Product owner</role>
+         </roles>
+         <timezone>Europe/Prague</timezone>
+      </developer>
+      <developer>
+         <id>ficap</id>
+         <email>ficap@redhat.com</email>
+         <organization>Red Hat</organization>
+         <name>Filip Čáp</name>
+         <roles>
+            <role>Developer</role>
+         </roles>
+         <timezone>Europe/Prague</timezone>
+      </developer>
+      <developer>
+         <id>mijaros</id>
+         <email>mjaros@redhat.com</email>
+         <organization>Red Hat</organization>
+         <name>Mirek Jaroš</name>
+         <roles>
+            <role>Tech lead</role>
+         </roles>
+         <timezone>Europe/Prague</timezone>
+      </developer>
+      <developer>
+         <id>sakalmic</id>
+         <email>sakalmic@fit.cvut.cz</email>
+         <organization>AirFit</organization>
+         <name>Michal Sakala</name>
+         <roles>
+            <role>developer</role>
+            <role>communicationsMaster</role>
+         </roles>
+         <timezone>Europe/Prague</timezone>
+      </developer>
+      <developer>
+         <id>pmacik</id>
+         <email>pmacik@redhat.com</email>
+         <organization>Red Hat</organization>
+         <name>Pavel Macík</name>
+         <roles>
+            <role>Tech lead</role>
+         </roles>
+         <timezone>Europe/Prague</timezone>
+      </developer>
+      <developer>
+         <id>jpechane</id>
+         <email>jpechane@redhat.com</email>
+         <organization>Red Hat</organization>
+         <name>Jiří Pechanec</name>
+         <roles>
+            <role>The guru</role>
+         </roles>
+         <timezone>Europe/Prague</timezone>
+      </developer>
+   </developers>
+
+   <properties>
+      <org.junit.platform.version>1.2.0</org.junit.platform.version>
+      <org.junit.jupiter.version>5.2.0</org.junit.jupiter.version>
+      <maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
+      <org.java-docker.version>3.1.0-rc-3</org.java-docker.version>
+      <org.slf4j.version>1.7.5</org.slf4j.version>
+      <org.codehouse.mojo.version>1.6.0</org.codehouse.mojo.version>
+   </properties>
+
+   <build>
+      <plugins>
+         <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${maven-surefire-plugin.version}</version>
+            <dependencies>
+               <dependency>
+                  <groupId>org.junit.platform</groupId>
+                  <artifactId>junit-platform-surefire-provider</artifactId>
+                  <version>${org.junit.platform.version}</version>
+               </dependency>
+               <dependency>
+                  <groupId>org.junit.jupiter</groupId>
+                  <artifactId>junit-jupiter-engine</artifactId>
+                  <version>${org.junit.jupiter.version}</version>
+               </dependency>
+            </dependencies>
+         </plugin>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                  <source>7</source>
+                  <target>7</target>
+              </configuration>
+          </plugin>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>${org.codehouse.mojo.version}</version>
+            <executions>
+               <execution>
+                  <goals>
+                     <goal>java</goal>
+                  </goals>
+               </execution>
+            </executions>
+            <configuration>
+               <mainClass>com.redhat.patriot.network_simulator.example.Main</mainClass>
+               <cleanupDaemonThreads>false</cleanupDaemonThreads>
+            </configuration>
+         </plugin>
+         <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <configuration>
+               <archive>
+                  <manifest>
+                     <mainClass>com.redhat.patriot.network_simulator.example.Main</mainClass>
+                  </manifest>
+               </archive>
+               <descriptorRefs>
+                  <descriptorRef>jar-with-dependencies</descriptorRef>
+               </descriptorRefs>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
+   <reporting>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <version>3.0.0</version>
+            <configuration>
+               <configLocation>./checkstyle.xml</configLocation>
+               <encoding>UTF-8</encoding>
+               <consoleOutput>true</consoleOutput>
+               <failsOnError>true</failsOnError>
+               <linkXRef>false</linkXRef>
+            </configuration>
+            <reportSets>
+               <reportSet>
+                  <reports>
+                     <report>checkstyle</report>
+                  </reports>
+               </reportSet>
+            </reportSets>
+         </plugin>
+      </plugins>
+   </reporting>
+
+
+   <dependencies>
+      <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>slf4j-simple</artifactId>
+         <version>${org.slf4j.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>com.github.docker-java</groupId>
+         <artifactId>docker-java</artifactId>
+         <version>${org.java-docker.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.junit.jupiter</groupId>
+         <artifactId>junit-jupiter-api</artifactId>
+         <version>${org.junit.jupiter.version}</version>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
+
+</project>
