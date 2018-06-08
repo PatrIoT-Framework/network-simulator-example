@@ -1,6 +1,6 @@
 package com.redhat.patriot.network_simulator.example.container;
 
-import com.redhat.patriot.network_simulator.example.manager.DockerManagerImpl;
+import com.redhat.patriot.network_simulator.example.manager.DockerManager;
 import com.redhat.patriot.network_simulator.example.manager.Manager;
 import com.redhat.patriot.network_simulator.example.network.Network;
 
@@ -8,15 +8,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DockerContainer implements Container {
-    String[] name;
+    String name;
     String id;
-    DockerManagerImpl dockerManager;
+    DockerManager dockerManager;
 
-    public String[] getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(String[] name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -28,13 +28,13 @@ public class DockerContainer implements Container {
         this.id = id;
     }
 
-    public DockerContainer(String[] name, String id, DockerManagerImpl dockerManager) {
+    public DockerContainer(String name, String id, DockerManager dockerManager) {
         this.name = name;
         this.id = id;
         this.dockerManager = dockerManager;
     }
 
-    public DockerContainer(String[] name, String id) {
+    public DockerContainer(String name, String id) {
         this.name = name;
         this.id = id;
     }
@@ -44,7 +44,7 @@ public class DockerContainer implements Container {
     }
 
     public void setManager(Manager manager) {
-        this.dockerManager = (DockerManagerImpl) manager;
+        this.dockerManager = (DockerManager) manager;
     }
 
     @Override

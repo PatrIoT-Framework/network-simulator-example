@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
 
-public class DockerImage {
+public class DockerImage  implements Image{
     private static final Logger LOGGER = LoggerFactory.getLogger(DockerImage.class);
 
     private DockerClient dockerClient;
@@ -61,6 +61,12 @@ public class DockerImage {
             System.exit(0);
         }
     }
+
+    @Override
+    public void deleteImage(Set<String> tags) {
+
+    }
+
     public void deleteImage(String imageTag) {
         dockerClient.removeImageCmd(imageTag).exec();
     }
