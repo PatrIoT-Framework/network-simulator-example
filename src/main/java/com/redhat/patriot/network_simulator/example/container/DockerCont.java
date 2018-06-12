@@ -6,7 +6,7 @@ import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.core.command.ExecStartResultCallback;
 
 import java.util.concurrent.TimeUnit;
-
+@Deprecated
 public class DockerCont {
     private DockerClient dockerClient;
 

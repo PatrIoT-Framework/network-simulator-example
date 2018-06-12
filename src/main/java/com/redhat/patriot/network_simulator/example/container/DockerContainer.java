@@ -49,6 +49,11 @@ public class DockerContainer implements Container {
 
     @Override
     public boolean isAlive() {
+        return false;
+    }
+
+    @Override
+    public boolean exists() {
         List<Container> aliveCont = dockerManager.listContainers().stream()
                 .filter(DockerContainer -> DockerContainer.getId().equals(this.id))
                 .collect(Collectors.toList());
@@ -61,13 +66,10 @@ public class DockerContainer implements Container {
     }
 
     @Override
-    public boolean exist() {
-        return false;
-    }
-
-    @Override
-    public Network connectToNetwork(Network network) {
-        return null;
+    public void connectToNetwork(List<Network> networks) {
+        for (Network network : networks) {
+            dockerManager.connectContainerToNetwork(this, network);
+        }
     }
 
     @Override

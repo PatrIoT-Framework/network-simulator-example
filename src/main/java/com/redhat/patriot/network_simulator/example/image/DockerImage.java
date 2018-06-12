@@ -54,8 +54,6 @@ public class DockerImage  implements Image{
                 e.printStackTrace();
             }
 
-
-
         } else {
             LOGGER.warn("DOCKERFILES does not exists");
             System.exit(0);

@@ -1,14 +1,15 @@
 package com.redhat.patriot.network_simulator.example.container;
 
-import com.redhat.patriot.network_simulator.example.manager.Manager;
 import com.redhat.patriot.network_simulator.example.network.Network;
 
-public interface Container {
+import java.util.List;
 
+public interface Container {
+    String getName();
     String getId();
     boolean isAlive();
-    boolean exist();
-    Network connectToNetwork(Network network);
+    boolean exists();
+    void connectToNetwork(List<Network> networks);
     void destroyContainer();
 
 }

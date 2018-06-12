@@ -5,7 +5,6 @@ import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.redhat.patriot.network_simulator.example.args.CommandLineParser;
 import com.redhat.patriot.network_simulator.example.cleanup.Cleaner;
-import com.redhat.patriot.network_simulator.example.manager.DockerController;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.slf4j.Logger;
