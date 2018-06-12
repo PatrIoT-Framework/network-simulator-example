@@ -3,7 +3,6 @@ package com.redhat.patriot.network_simulator.example.cleanup;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Network;
 import com.redhat.patriot.network_simulator.example.TestClass;
-import com.redhat.patriot.network_simulator.example.container.DockerCont;
 import com.redhat.patriot.network_simulator.example.image.DockerImage;
 import com.redhat.patriot.network_simulator.example.network.DockerNetwork;
 import org.junit.jupiter.api.Test;
