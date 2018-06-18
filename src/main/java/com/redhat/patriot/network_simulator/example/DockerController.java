@@ -10,8 +10,7 @@ import com.redhat.patriot.network_simulator.example.container.Container;
 import com.redhat.patriot.network_simulator.example.image.DockerImage;
 import com.redhat.patriot.network_simulator.example.manager.DockerManager;
 import com.redhat.patriot.network_simulator.example.network.DockerNetwork;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.redhat.patriot.network_simulator.example.network.Network;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +21,6 @@ public class DockerController {
     private DockerClient dockerClient = DockerClientBuilder.
             getInstance(DefaultDockerClientConfig.createDefaultConfigBuilder().build()).build();
     private DockerManager dockerManager = new DockerManager();
-    private Logger LOGGER = LoggerFactory.getLogger(DockerController.class);
 
     public void genererateEnviroment() {
         List<String> networks = new ArrayList<>();
@@ -42,19 +40,13 @@ public class DockerController {
             networks.add(clientNetwork.getName());
 
             Container router = dockerManager.createContainer("routerino",tagRouter);
-            router.connectToNetwork(Arrays.asList(clientNetwork, serverNetwork));
-            dockerManager.startContainer(router);
-            conts.add(router.getName());
+            conts.add(connectAndStart(dockerManager, router, Arrays.asList(clientNetwork, serverNetwork)));
 
             Container commClient = dockerManager.createContainer("comm_client", tagApp);
-            commClient.connectToNetwork(Arrays.asList(clientNetwork));
-            dockerManager.startContainer(commClient);
-            conts.add(commClient.getName());
+            conts.add(connectAndStart(dockerManager, commClient, Arrays.asList(clientNetwork)));
 
             Container commServer = dockerManager.createContainer("comm_server", tagApp);
-            commServer.connectToNetwork(Arrays.asList(serverNetwork));
-            dockerManager.startContainer(commServer);
-            conts.add(commServer.getName());
+            conts.add(connectAndStart(dockerManager, commServer, Arrays.asList(serverNetwork)));
 
             setGW(commClient, commServer, networks, router);
 
@@ -64,6 +56,11 @@ public class DockerController {
             cleaner.cleanUp(networks, conts);
         }
 
+    }
+    String connectAndStart(DockerManager manager,Container container, List<Network> networks) {
+        container.connectToNetwork(networks);
+        manager.startContainer(container);
+        return container.getName();
     }
 
     void buildImages(String tagApp, String tagRouter, DockerClient dockerClient) {

@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DockerManager implements Manager {
 
-    private Logger LOGGER = LoggerFactory.getLogger(DockerManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DockerManager.class);
     private DockerClient dockerClient = DockerClientBuilder.
             getInstance(DefaultDockerClientConfig.createDefaultConfigBuilder().build()).build();
 
@@ -85,7 +85,7 @@ public class DockerManager implements Manager {
 
     @Override
     public void destroyNetwork(Network network) {
-        dockerClient.removeNetworkCmd(network.getName()).exec();
+        dockerClient.removeNetworkCmd(network.getName()).withNetworkId(network.getId()).exec();
     }
 
     @Override

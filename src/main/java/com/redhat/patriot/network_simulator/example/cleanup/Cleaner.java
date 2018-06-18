@@ -3,7 +3,6 @@ package com.redhat.patriot.network_simulator.example.cleanup;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Network;
-import org.apache.log4j.pattern.LogEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +11,7 @@ import java.util.List;
 
 public class Cleaner {
     private DockerClient dockerClient;
-    private Logger LOGGER = LoggerFactory.getLogger(Cleaner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Cleaner.class);
     public Cleaner(DockerClient dockerClient) {
         this.dockerClient = dockerClient;
     }
