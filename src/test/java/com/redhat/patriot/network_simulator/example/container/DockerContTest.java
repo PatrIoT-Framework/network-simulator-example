@@ -1,13 +1,15 @@
 package com.redhat.patriot.network_simulator.example.container;
 
-import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Network;
 import com.redhat.patriot.network_simulator.example.TestClass;
 import com.redhat.patriot.network_simulator.example.image.DockerImage;
+import com.redhat.patriot.network_simulator.example.manager.DockerManager;
 import com.redhat.patriot.network_simulator.example.network.DockerNetwork;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -16,49 +18,49 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DockerContTest extends TestClass {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(DockerContTest.class);
     @Test
     void createContainer() {
 
-        DockerCont dockerCont = new DockerCont(dockerClient);
+        DockerManager dockerManager = new DockerManager();
+
         DockerImage dockerImage = new DockerImage(dockerClient);
 
         List<String> tags = Arrays.asList("testtag:02");
         List<String> nameOfCont = Arrays.asList("test_cont");
 
         dockerImage.buildImage(new HashSet<>(tags), "router/Dockerfile");
-        dockerCont.createContainer(tags.get(0), nameOfCont.get(0));
+        DockerContainer dockerCont = (DockerContainer) dockerManager.createContainer("test_cont", "testtag:02");
 
         List<Container> outputConts = dockerClient.listContainersCmd().withShowAll(true)
                 .withNameFilter(nameOfCont).exec();
 
         assertEquals(false, outputConts.isEmpty());
-
-        dockerCont.deleteCont(nameOfCont.get(0));
+        dockerManager.destroyContainer(dockerCont);
     }
 
     @Test
     void connectContToNetwork() {
 
-        DockerCont dockerCont = new DockerCont(dockerClient);
-        DockerNetwork dockerNetwork = new DockerNetwork(dockerClient);
-        DockerImage dockerImage = new DockerImage(dockerClient);
-
         List<String> tags = Arrays.asList("test_tag:01");
-        String contName = "test_cont";
-        String networkName = "test_network";
-
+        DockerManager dockerManager = new DockerManager();
+        DockerImage dockerImage = new DockerImage(dockerClient);
         dockerImage.buildImage(new HashSet<>(tags), "router/Dockerfile");
-        CreateContainerResponse containerResponse = dockerCont.createContainer(tags.get(0), contName);
-        Network network = dockerNetwork.createNetworkWithSubnet("172.42.0.0/16", networkName);
 
-        dockerCont.connectContToNetwork(containerResponse, network.getId());
+        DockerContainer dockerCont = (DockerContainer) dockerManager
+                .createContainer("test_cont", tags.get(0));
 
-        Assertions.assertNotNull(dockerClient.inspectContainerCmd(containerResponse.getId()).exec()
-                .getNetworkSettings().getNetworks().get(networkName));
+        DockerNetwork dockerNetwork = (DockerNetwork) dockerManager
+                .createNetwork("test_network", "172.42.0.0/16");
 
-        dockerNetwork.deleteNetwork(networkName);
-        dockerCont.deleteCont(contName);
+
+        dockerCont.connectToNetwork(Arrays.asList(dockerNetwork));
+
+        Assertions.assertNotNull(dockerClient.inspectContainerCmd(dockerCont.getId()).exec()
+                .getNetworkSettings().getNetworks().toString().contains(dockerNetwork.getId()));
+
+        dockerManager.destroyContainer(dockerCont);
+        dockerManager.destroyNetwork(dockerNetwork);
         dockerImage.deleteImage(tags.get(0));
     }
 }
