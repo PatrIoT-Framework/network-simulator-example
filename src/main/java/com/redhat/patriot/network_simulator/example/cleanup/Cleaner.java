@@ -3,13 +3,16 @@ package com.redhat.patriot.network_simulator.example.cleanup;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Network;
+import org.apache.log4j.pattern.LogEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 
 public class Cleaner {
     private DockerClient dockerClient;
-
+    private Logger LOGGER = LoggerFactory.getLogger(Cleaner.class);
     public Cleaner(DockerClient dockerClient) {
         this.dockerClient = dockerClient;
     }
@@ -29,12 +32,13 @@ public class Cleaner {
             }
         }
 
-        List<Network> outputNetwork = dockerClient.listNetworksCmd()
-                .withNameFilter(String.join(", ", networks)).exec();
-        if (!outputNetwork.isEmpty()) {
-            for (Network network: outputNetwork) {
-                dockerClient.removeNetworkCmd(network.getName()).exec();
 
+        LOGGER.info("Trying to clear networks");
+        if (!networks.isEmpty()) {
+            for (String networkName : networks) {
+                List<Network> network = dockerClient.listNetworksCmd().withNameFilter(networkName).exec();
+                LOGGER.info("Network " + network.get(0).getName() + " is being cleared");
+                dockerClient.removeNetworkCmd(network.get(0).getName()).exec();
             }
         }
     }

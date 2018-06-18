@@ -14,5 +14,6 @@ public interface Manager {
     void destroyContainer(Container container);
     void destroyNetwork(Network network);
     void runCommand(Container container, String command);
+    void startContainer(Container container);
 
 }

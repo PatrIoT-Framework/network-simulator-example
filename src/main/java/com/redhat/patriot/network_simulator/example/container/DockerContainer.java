@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DockerContainer implements Container {
-    String name;
-    String id;
-    DockerManager dockerManager;
+    private String name;
+    private String id;
+    private DockerManager dockerManager;
 
     public String getName() {
         return name;
@@ -60,9 +60,8 @@ public class DockerContainer implements Container {
 
         if (aliveCont.isEmpty()) {
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     @Override

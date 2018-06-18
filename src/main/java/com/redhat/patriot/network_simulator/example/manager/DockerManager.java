@@ -12,6 +12,8 @@ import com.redhat.patriot.network_simulator.example.container.Container;
 import com.redhat.patriot.network_simulator.example.container.DockerContainer;
 import com.redhat.patriot.network_simulator.example.network.DockerNetwork;
 import com.redhat.patriot.network_simulator.example.network.Network;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,17 +23,20 @@ import java.util.concurrent.TimeUnit;
 
 public class DockerManager implements Manager {
 
+    private Logger LOGGER = LoggerFactory.getLogger(DockerManager.class);
     private DockerClient dockerClient = DockerClientBuilder.
             getInstance(DefaultDockerClientConfig.createDefaultConfigBuilder().build()).build();
 
     @Override
     public Container createContainer(String name, String tag) {
+        LOGGER.info("Started creating container");
         CreateContainerResponse containerResponse = dockerClient.createContainerCmd(tag)
                 .withPrivileged(true)
                 .withCmd()
                 .withName(name)
                 .exec();
-        return new DockerContainer(name, containerResponse.getId());
+        LOGGER.info("Container created with id: " + containerResponse.getId());
+        return new DockerContainer(name, containerResponse.getId(), new DockerManager());
     }
 
     @Override
@@ -99,6 +104,12 @@ public class DockerManager implements Manager {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void startContainer(Container container) {
+        LOGGER.info("Starting container");
+        dockerClient.startContainerCmd(container.getName()).exec();
     }
 
 

@@ -40,9 +40,8 @@ public class DockerNetwork implements Network {
                                     .collect(Collectors.toList());
         if (networks.isEmpty()) {
             return false;
-        } else {
-            return true;
         }
+        return false;
     }
 
 }
