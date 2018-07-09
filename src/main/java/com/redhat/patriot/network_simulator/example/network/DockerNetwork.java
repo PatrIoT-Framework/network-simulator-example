@@ -1,19 +1,47 @@
 package com.redhat.patriot.network_simulator.example.network;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.CreateNetworkResponse;
-import com.github.dockerjava.api.model.Network;
+import com.redhat.patriot.network_simulator.example.manager.Manager;
 
-public class DockerNetwork {
-    public Network createNetworkWithSubnet(String subnet, String name, DockerClient dockerClient) {
-        Network.Ipam ipam = new Network.Ipam().withConfig(new Network.Ipam.Config().withSubnet(subnet));
+import java.util.List;
+import java.util.stream.Collectors;
 
-        CreateNetworkResponse networkResponse = dockerClient.createNetworkCmd().withName(name)
-                .withDriver("bridge")
-                .withIpam(ipam)
-                .exec();
-        Network network = dockerClient.inspectNetworkCmd().withNetworkId(networkResponse.getId()).exec();
-        return network;
+public class DockerNetwork implements Network {
+    private DockerClient dockerClient;
+    private String name;
+    private String id;
+
+    public DockerNetwork(String name, String id) {
+        this.name = name;
+        this.id = id;
+    }
+
+    public DockerNetwork(DockerClient dockerClient, String name, String id) {
+
+        this.dockerClient = dockerClient;
+        this.name = name;
+        this.id = id;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public boolean exists(Manager dockerManager) {
+        List<Network> networks = dockerManager.listNetworks().stream()
+                                    .filter(Network -> Network.getId().equals(this.id))
+                                    .collect(Collectors.toList());
+        if (networks.isEmpty()) {
+            return false;
+        }
+        return false;
     }
 
 }
