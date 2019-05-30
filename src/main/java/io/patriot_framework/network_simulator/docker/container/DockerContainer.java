@@ -111,8 +111,7 @@ public class DockerContainer implements Container {
 
     /**
      * Method returns if is container alive.
-     *
-     * @return
+     * @return returns if container is alive
      */
     @Override
     public boolean exists() {
@@ -126,7 +125,7 @@ public class DockerContainer implements Container {
     /**
      * Method provides connecting container to networks.
      *
-     * @param networks
+     * @param networks networks to which will be container connected
      */
     @Override
     public void connectToNetwork(List<Network> networks) {

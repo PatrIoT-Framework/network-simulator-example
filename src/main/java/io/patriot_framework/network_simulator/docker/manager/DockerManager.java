@@ -179,8 +179,7 @@ public class DockerManager implements Manager {
 
     /**
      * Method providing service for finding networks and return list of all created networks
-     *
-     * @return
+     * @return returns all networks running in docker
      */
     @Override
     public List<Network> listNetworks() {
@@ -211,7 +210,7 @@ public class DockerManager implements Manager {
     /**
      * Method which destroys docker network based on network id.
      *
-     * @param container
+     * @param container container which needs to be destroyed
      */
     @Override
     public void destroyContainer(Container container) {
@@ -242,7 +241,7 @@ public class DockerManager implements Manager {
     /**
      * Method which destroys docker network based on network id.
      *
-     * @param network
+     * @param network network which needs to be destroyed
      */
     @Override
     public void destroyNetwork(Network network) {
@@ -252,8 +251,8 @@ public class DockerManager implements Manager {
     /**
      * Method is providing execution of commands directly in running docker container.
      *
-     * @param container
-     * @param command
+     * @param container container in which will be command executed
+     * @param command command which will be executed
      */
     @Override
     public void runCommand(Container container, String command) {
@@ -277,7 +276,7 @@ public class DockerManager implements Manager {
     /**
      * Method which starts docker container based on container name.
      *
-     * @param container
+     * @param container container which will be started
      */
     @Override
     public void startContainer(Container container) {
@@ -301,8 +300,8 @@ public class DockerManager implements Manager {
     /**
      * Method gathers gateway's network mask.
      *
-     * @param container
-     * @return
+     * @param container container from which will generator gather gateway
+     * @return network mask (decimal)
      */
     public Integer getDefaultGwNetworkMask(Container container) {
         return dockerClient.inspectContainerCmd(container.getName()).withContainerId(container.getId())
